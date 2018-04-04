@@ -1,6 +1,7 @@
 <template>
 	<div class="chat-container">
-		<UsersList msg="Welcome to Your Vue.js App" />
+		<RoomTitle />
+		<RoomsList @changeRoom="goToRoom" msg="Welcome to Chatter" />
 		<Messages />
 		<MessageInput />
 	</div>
@@ -9,14 +10,16 @@
 <script>
 // @ is an alias to /src
 import { mapGetters, mapActions } from 'vuex'
-import UsersList from '@/components/UsersList.vue'
+import RoomsList from '@/components/RoomsList.vue'
 import MessageInput from '@/components/MessageInput.vue'
 import Messages from '@/components/Messages.vue'
+import RoomTitle from '@/components/RoomTitle.vue'
 
 export default {
 	name: 'home',
 	components: {
-		UsersList,
+		RoomTitle,
+		RoomsList,
 		MessageInput,
 		Messages
 	},
@@ -24,15 +27,42 @@ export default {
 		return {}
 	},
 	computed: {
+		...mapGetters(['nickname']),
 		roomName() {
 			return this.$route.params.roomName
 		}
 	},
 	methods: {
-		...mapActions(['setRoom'])
+		...mapActions(['setRoom']),
+		goToRoom(roomName) {
+			console.log(`roomName in room`, roomName)
+			this.$router.push({ name: 'room', params: { roomName } })
+		}
 	},
 	created() {
-		this.$socket.emit('setRoom', this.roomName)
+		console.log(`this.nickname`, this.nickname)
+		if (!this.nickname) this.$router.push({ name: 'home' })
+		this.setRoom(this.roomName)
+		this.$socket.emit('setRoom', {
+			roomName: this.roomName,
+			nickname: this.nickname
+		})
+	},
+	updated() {
+		this.$socket.emit('setRoom', {
+			roomName: this.roomName,
+			nickname: this.nickname
+		})
+	},
+	beforeRouteUpdate(to, from, next) {
+		this.$socket.emit('leaveRoom', this.roomName)
+		console.log(`to.params.roomName`, to.params.roomName)
+		this.$socket.emit('setRoom', {
+			roomName: to.params.roomName,
+			nickname: this.nickname
+		})
+		this.setRoom(to.params.roomName)
+		next()
 	}
 }
 </script>

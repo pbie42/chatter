@@ -5,24 +5,39 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
 	state: {
-		nickname: '',
-		room: '',
-		connect: false
+		user: {
+			nickname: '',
+			room: ''
+		},
+		connect: false,
+		rooms: [{ name: 'general', messages: [] }, { name: 'help', messages: [] }]
 	},
 	getters: {
 		nickname(state) {
-			return state.nickname
+			return state.user.nickname
 		},
 		currentRoom(state) {
-			return state.room
+			return state.user.room
+		},
+		rooms(state) {
+			return state.rooms
+		},
+		roomMessages(state) {
+			return roomName => {
+				return state.rooms.find(room => room.name === roomName).messages
+			}
 		}
 	},
 	mutations: {
 		setRoom(state, roomName) {
-			state.room = roomName
+			state.user.room = roomName
 		},
 		setNickname(state, nickname) {
-			state.nickname = nickname
+			state.user.nickname = nickname
+		},
+		newMessage(state, { newMessage, roomName, userName }) {
+			const room = state.rooms.find(room => room.name === roomName)
+			room.messages.push({ message: newMessage, userName: userName })
 		},
 		SOCKET_CONNECT(state, status) {
 			console.log(`connected`)
@@ -37,13 +52,15 @@ export default new Vuex.Store({
 		setNickname({ commit }, nickname) {
 			commit('setNickname', nickname)
 		},
-		socket_testing({ commit }, roomName) {
-			console.log(`we are in the room:`, roomName)
+		setRoom({ commit }, roomName) {
 			commit('setRoom', roomName)
 		},
 		socket_setRoom: (context, roomName) => {
 			console.log(`We really in here`)
 			// if (!roomName) throw new Error('Undefined Room Name')
+		},
+		socket_newMessage({ commit }, data) {
+			commit('newMessage', data)
 		}
 	}
 })

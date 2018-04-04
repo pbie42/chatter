@@ -5,10 +5,6 @@
 				<label for="nickname">Nickname:</label>
 				<input type="text" name="nickname" v-model="nickname">
 			</div>
-			<div class="room-input">
-				<label for="room">Room:</label>
-				<input type="text" name="room" v-model="room">
-			</div>
 			<button @click="enterChat">Submit</button>
 		</form>
 	</div>
@@ -21,17 +17,14 @@ export default {
 	name: 'home',
 	data() {
 		return {
-			nickname: '',
-			room: ''
+			nickname: ''
 		}
 	},
 	methods: {
 		...mapActions(['setNickname']),
 		enterChat() {
-			console.log(`enter chat`)
 			this.setNickname(this.nickname)
-			this.$router.push({ name: 'room', params: { roomName: this.room } })
-			this.room = ''
+			this.$router.push({ name: 'room', params: { roomName: 'general' } })
 			this.nickname = ''
 		}
 	}

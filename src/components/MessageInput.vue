@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
 	name: 'MessageInput',
 	data() {
@@ -12,9 +13,15 @@ export default {
 			message: ''
 		}
 	},
+	computed: {
+		...mapGetters(['currentRoom'])
+	},
 	methods: {
 		newMessage() {
-			this.$socket.emit('newMessage', this.message)
+			this.$socket.emit('newMessage', {
+				newMessage: this.message,
+				roomName: this.currentRoom
+			})
 			this.message = ''
 		}
 	}

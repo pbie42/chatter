@@ -36,8 +36,9 @@ body {
 	margin: 0;
 	display: grid;
 	grid-template-columns: 1fr 3fr;
-	grid-template-rows: 9fr 1fr;
+	grid-template-rows: 50px 9fr 50px;
 	grid-template-areas:
+		'users title'
 		'users messages'
 		'users input';
 }

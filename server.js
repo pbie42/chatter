@@ -2,18 +2,39 @@ var app = require('express')()
 var http = require('http').Server(app)
 var io = require('socket.io')(http)
 
+const users = []
+
 io.on('connection', function(socket) {
 	console.log('a user connected')
 	io.emit('connect')
+
+	console.log(`socket.id`, socket.id)
 
 	socket.on('joinRoom', function(roomName) {
 		console.log(`User would like to join ${roomName}`)
 	})
 
-	socket.on('setRoom', function(roomName) {
+	socket.on('setRoom', function({ roomName, nickname }) {
+		console.log(`entering room: ${roomName}`)
+		socket.nickname = nickname
+		users.push({ nickname, id: socket.id })
 		socket.join(roomName)
-		io.to(roomName).emit('testing', roomName)
-		console.log(`User would like to set ${roomName}`)
+		io.to(roomName).emit('setName', roomName)
+	})
+
+	socket.on('leaveRoom', function(roomName) {
+		console.log(`leaving room:`, roomName)
+		socket.leave(roomName)
+	})
+
+	socket.on('getRoom', function(roomName) {
+		const roomUsers = []
+		io.in(roomName).clients((err, clients) => {
+			clients.forEach(client => {
+				roomUsers.push(users.find(user => user.id === client))
+			})
+		})
+		io.to(roomName).emit('roomUsers', roomUsers)
 	})
 
 	socket.on('test', function() {
@@ -21,9 +42,10 @@ io.on('connection', function(socket) {
 		io.emit('setRoom')
 	})
 
-	socket.on('newMessage', function(newMessage) {
+	socket.on('newMessage', function({ newMessage, roomName }) {
 		console.log(`new message homie`, newMessage)
-		io.emit('newMessage', newMessage)
+		const user = users.find(user => user.id === socket.id)
+		io.emit('newMessage', { newMessage, roomName, userName: user.nickname })
 	})
 })
 
