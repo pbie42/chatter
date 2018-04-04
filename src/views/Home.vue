@@ -1,18 +1,52 @@
 <template>
-  <div class="home">
-    <img src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+	<div class="home-container">
+		<form @submit.prevent>
+			<div class="room-input">
+				<label for="nickname">Nickname:</label>
+				<input type="text" name="nickname" v-model="nickname">
+			</div>
+			<div class="room-input">
+				<label for="room">Room:</label>
+				<input type="text" name="room" v-model="room">
+			</div>
+			<button @click="enterChat">Submit</button>
+		</form>
+	</div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import { mapActions } from 'vuex'
 
 export default {
-  name: 'home',
-  components: {
-    HelloWorld
-  }
+	name: 'home',
+	data() {
+		return {
+			nickname: '',
+			room: ''
+		}
+	},
+	methods: {
+		...mapActions(['setNickname']),
+		enterChat() {
+			console.log(`enter chat`)
+			this.setNickname(this.nickname)
+			this.$router.push({ name: 'room', params: { roomName: this.room } })
+			this.room = ''
+			this.nickname = ''
+		}
+	}
 }
 </script>
+
+<style>
+.home-container form {
+	margin-top: 50vh;
+	display: flex;
+	flex-flow: column;
+}
+
+.room-input {
+	display: flex;
+	justify-content: space-between;
+}
+</style>

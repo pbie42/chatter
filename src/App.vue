@@ -1,31 +1,67 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+	<div id="app">
+		<router-view/>
+	</div>
 </template>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
+* {
+	user-select: none;
+	box-sizing: border-box;
 }
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
+html {
+	font-size: 10px;
 }
 
-#nav a.router-link-exact-active {
-  color: #42b983;
+body {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100vh;
+	margin: 0;
+	font-family: 'Quicksand', sans-serif;
+	min-width: 500px;
+}
+
+.chat-container {
+	position: fixed;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	width: 100%;
+	overflow-y: scroll;
+	margin: 0;
+	display: grid;
+	grid-template-columns: 1fr 3fr;
+	grid-template-rows: 9fr 1fr;
+	grid-template-areas:
+		'users messages'
+		'users input';
+}
+
+.home-container {
+	position: fixed;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	width: 100%;
+	overflow-y: scroll;
+	margin: 0;
+	display: flex;
+	justify-content: center;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+p {
+	margin: 0;
+	padding: 0;
 }
 </style>
