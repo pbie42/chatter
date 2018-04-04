@@ -1,6 +1,6 @@
 <template>
 	<div class="rooms-list">
-		<h1>{{ msg }}</h1>
+		<h1>Current Conversations</h1>
 		<ul>
 			<li @click="goToRoom(room.name)" v-for="room in rooms" :key="room.name">{{ room.name }}</li>
 		</ul>
@@ -24,7 +24,6 @@ export default {
 	methods: {
 		...mapActions(['setRoom']),
 		goToRoom(roomName) {
-			console.log(`roomName in list`, roomName)
 			this.$emit('changeRoom', roomName)
 		}
 	}

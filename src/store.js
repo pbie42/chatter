@@ -24,7 +24,8 @@ export default new Vuex.Store({
 		},
 		roomMessages(state) {
 			return roomName => {
-				return state.rooms.find(room => room.name === roomName).messages
+				const room = state.rooms.find(room => room.name === roomName)
+				if (room && room.messages) return room.messages
 			}
 		}
 	},

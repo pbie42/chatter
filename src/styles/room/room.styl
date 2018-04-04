@@ -1,0 +1,16 @@
+.chat-container
+	position: fixed
+	top: 0
+	left: 0
+	bottom: 0
+	right: 0
+	width: 100%
+	overflow-y: scroll
+	margin: 0
+	display: grid
+	grid-template-columns: 1fr 3fr
+	grid-template-rows: 50px 9fr 50px
+	grid-template-areas: \
+		'users title' \
+		'users messages' \
+		'users input'

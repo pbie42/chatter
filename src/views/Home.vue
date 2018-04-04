@@ -1,6 +1,8 @@
 <template>
 	<div class="home-container">
 		<form @submit.prevent>
+			<h1>Welcome to Chatter</h1>
+			<h3>Please choose a nickname to enter the conversation!</h3>
 			<div class="room-input">
 				<label for="nickname">Nickname:</label>
 				<input type="text" name="nickname" v-model="nickname">
@@ -30,16 +32,3 @@ export default {
 	}
 }
 </script>
-
-<style>
-.home-container form {
-	margin-top: 50vh;
-	display: flex;
-	flex-flow: column;
-}
-
-.room-input {
-	display: flex;
-	justify-content: space-between;
-}
-</style>
